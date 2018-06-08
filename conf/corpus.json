@@ -1,0 +1,45 @@
+[
+	{
+		"author": "vergil",
+		"title": "aeneid",
+		"lang": "latin",
+		"cts_urn": "urn:cts:latinLit:phi0690.phi003.perseus-lat2",
+		"cltk_path":["latin","text","latin_text_perseus","Vergil","opensource","verg.a_lat.xml"]
+	},
+	{
+		"author": "ovid",
+		"title": "metamorphoses",
+		"lang": "latin",
+		"cts_urn": "urn:cts:latinLit:phi0959.phi006.perseus-lat2",
+		"cltk_path":["latin","text","latin_text_perseus","Ovid","opensource","ovid.met_lat.xml"]
+	},	
+	{
+		"author": "lucan",
+		"title": "bellum_civile",
+		"lang": "latin",
+		"cts_urn": "urn:cts:latinLit:phi0917.phi001.perseus-lat2",
+		"cltk_path":["latin","text","latin_text_perseus","Lucan","opensource","pharsalia_lat.xml"]
+	},
+	{
+		"author": "silius_italicus",
+		"title": "bellum_civile",
+		"lang": "latin",
+		"cts_urn": "urn:cts:latinLit:phi1345.phi001.perseus-lat2",
+		"cltk_path":["latin","text","latin_text_perseus","SiliusItalicus","opensource","silus.punica_lat.xml"]
+	},
+	{
+		"author": "valerius_flaccus",
+		"title": "argonautica",
+		"lang": "latin",
+		"cts_urn": "urn:cts:latinLit:phi1035.phi001.perseus-lat2",
+		"cltk_path":["latin","text","latin_text_perseus","Flaccus","opensource","v.fl_lat.xml"]
+	},
+	{
+		"author": "statius",
+		"title": "thebaid",
+		"lang": "latin",
+		"cts_urn": "urn:cts:latinLit:phi1020.phi001.perseus-lat2",
+		"cltk_path":["latin","text","latin_text_perseus","Statius","opensource","stat.theb_lat.xml"]
+	}
+]
+	
