@@ -8,28 +8,26 @@
 
 import os
 import json
-from tqdm import tqdm
+import argparse
+
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
 from MyCapytain.retrievers.cts5 import HttpCtsRetriever
-from MyCapytain.common.constants import Mimetypes
+
+from mta_summer_2018 import Config, Text
 
 #
 # global values
 #
 
 
-
 #
 # functions
 #
 
-def download_and_save(urn, path):
+def download_and_save(resolver, urn, path):
     '''Download a remote text and save locally'''
 
     print('Downloading {}...'.format(urn))
-
-    # Create a Resolver instance
-    resolver = HttpCtsResolver(HttpCtsRetriever(server_url))
 
     # Get references to books
     #  (all our texts are of `book.line` format)
@@ -62,19 +60,34 @@ def download_and_save(urn, path):
 #
 
 if __name__ == '__main__':
+    
+    parser = argparse.ArgumentParser(
+        description='Populate corpus from remote CTS server'
+    )
+    parser.add_argument('--server', 
+        metavar='URL', type=str, default=Config.SERVER_URL,
+        help='remote CTS server')
+    parser.add_argument('--index', 
+        metavar="FILE", default=Config.INDEX_PATH,
+        help='corpus index file')
+    parser.add_argument('--dest', 
+        metavar="DIR", default=Config.LOCAL_BASE,
+        help='local corpus directory')
 
-    server_url = 'http://cts.perseids.org/api/cts/'
-    index_path = os.path.join('conf', 'corpus.json')
-    local_base = os.path.join('data', 'corpus')
+    args = parser.parse_args()
 
     # Read the corpus metadata
-    with open(index_path) as f:
-        corpus = json.load(f)
+    with open(args.index) as f:
+        corpus = [Text.fromDict(rec) for rec in json.load(f)]
+    
+    # Create a Resolver instance
+    resolver = HttpCtsResolver(HttpCtsRetriever(args.server))
     
     for work in corpus:
-        print('📜 {} {}'.format(work['author'], work['title']))
+        print('📜 {} {}'.format(work.author, work.title))
         download_and_save(
-            urn = work['cts_urn'], 
-            path = os.path.join(local_base, work['author'] + '.json')
+            resolver = resolver,
+            urn = work.urn, 
+            path = os.path.join(args.dest, work.author + '.json')
         )
         print()
