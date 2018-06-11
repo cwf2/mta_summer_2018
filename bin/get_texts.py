@@ -8,7 +8,6 @@
 
 import os
 import json
-from tqdm import tqdm
 from MyCapytain.resolvers.cts.api import HttpCtsResolver
 from MyCapytain.retrievers.cts5 import HttpCtsRetriever
 from MyCapytain.common.constants import Mimetypes
