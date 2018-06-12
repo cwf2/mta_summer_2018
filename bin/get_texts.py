@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
     # Read the corpus metadata
     with open(args.index) as f:
-        corpus = [Text.fromDict(rec) for rec in json.load(f)]
+        corpus = [Text.metaFromDict(rec) for rec in json.load(f)]
     
     # Create a Resolver instance
     resolver = HttpCtsResolver(HttpCtsRetriever(args.server))

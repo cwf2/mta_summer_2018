@@ -3,6 +3,7 @@
 
 import os
 import json
+import numpy as np
 
 #
 # Set default paths, CTS server here
@@ -24,13 +25,27 @@ class Text(object):
         self.title = title
         self.lang = lang
         self.urn = urn
-    
+        self.lines = None
+        self.loci = None
     
     def __repr__(self):
         return('<Text {}: {} {}>'.format(self.urn, self.author, self.title))
     
+    
+    def dataFromJson(self, file):
+        '''Load loci and verse lines from JSON file'''
+
+        # read from the JSON file
+        with open(file) as f:
+            data = np.array(json.load(f))
+        
+        # wipe any existing data
+        self.loci = data[:,0]
+        self.lines = data[:,1]
+        
+    
     @classmethod
-    def fromDict(self, rec):
+    def metaFromDict(self, rec):
         '''Create a new text object from a dictionary'''
         
         return self(
