@@ -9,7 +9,6 @@
 import os
 import json
 import argparse
-import numpy as np
 
 from mta_summer_2018 import Config, Text
 
@@ -52,3 +51,4 @@ if __name__ == '__main__':
         text.dataFromJson(os.path.join(args.dest, text.author + '.json'))
         
         # TODO : call sample
+        samples = sample(text.lines, sample_size=50)
