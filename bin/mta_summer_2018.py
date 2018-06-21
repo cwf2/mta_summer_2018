@@ -12,9 +12,9 @@ import numpy as np
 class Config(object):
     '''Configuration values'''
     
-    SERVER_URL = 'http://cts.perseids.org/api/cts/'
-    INDEX_PATH = os.path.join('conf', 'corpus.json')
-    LOCAL_BASE = os.path.join('data', 'corpus')
+    SERVER = 'http://cts.perseids.org/api/cts/'
+    INDEX = os.path.join('conf', 'corpus.json')
+    DATA = os.path.join('data')
 
 
 class Text(object):
