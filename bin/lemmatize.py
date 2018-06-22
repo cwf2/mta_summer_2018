@@ -81,13 +81,16 @@ if __name__ == '__main__':
     # Read the corpus metadata
     with open(Config.INDEX_PATH) as f:
         corpus = [Text.metaFromDict(rec) for rec in json.load(f)]
-        
+    counts = Counter()    
     # Read the JSON files
     for text in corpus:
         text.dataFromJson(os.path.join(Config.LOCAL_BASE, text.author + '.json'))
         
         lemmatized = lemmanade(text.lines)
-        counts = Counter([lem for line in lemmatized for lem in line])
+        filename = os.path.join(Config.LOCAL_BASE, text.author + '_lem.json')
+        with open(filename, 'w') as f:
+            json.dump(lemmatized, f)
+        counts.update([lem for line in lemmatized for lem in line])
         with open(countFile, 'w') as f:
         
             for word,count in counts.most_common():
