@@ -8,7 +8,8 @@
 
 import os
 import json
-import argparse
+
+from collections import Counter
 
 from mta_summer_2018 import Config, Text
 
@@ -20,45 +21,54 @@ from cltk.stem.lemma import LemmaReplacer
 # functions
 #
 
-def sample(lines, sample_size, offset=0):
-    '''group lines in to paragraphs'''
-    # TODO
-    pass
+def whiteTok(tok):
+    
+    whiteList = ['a', 'b', 'c', 'd','e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 
+                 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', 
+                 '3', '4', '5', '6', '7', '8', '9', '0', '-']
+    
+    chars = [c for c in tok if c in whiteList]
+    token = ''.join(chars)
+    
+    if len(token) > 0:
+        return token
 
-
-def bind(text, samplesize = 30, offset = 0):
-    '''stores lines in a list'''
+def lemmanade(lines):
     
     count = 0
-    chunk = ''
-    book = []
-    
-    for verse in text:
-        count = count + 1
-        chunk = chunk + verse
-        if count % samplesize == offset:
-            book.append(chunk)
-            chunk = ''
-    
-    return book
-
-def lemmatize(chunk):
-    
+    #chunk = ''
+    #tokenBook = []
+    lemons = []
+    #hapaxLegomena = []
     jvReplace = JVReplacer()
-    chunkLow = jvReplace.replace(chunk.lower())
-    
     wordTokenizer = WordTokenizer('latin')
-    chunkTok = wordTokenizer.tokenize(chunkLow)
-    chunkTok = [token for token in chunkTok if token not in ['.', ',', ':', ';']]
-    chunkTok = [token for token in chunkTok if len(token) > 0]
-    
-    
     lemmatizer = LemmaReplacer('latin')
-    lemmata = lemmatizer.lemmatize(chunkTok)
     
-    #lemmatized.append(lemmata)
     
-    return lemmata
+    
+    for verse in lines:
+        
+        count = count + 1
+       # chunk = chunk + verse
+        
+        chunkLow = jvReplace.replace(verse.lower())
+        
+        #tokenize the words
+        chunkTok = wordTokenizer.tokenize(chunkLow)
+        chunkTok = [whiteTok(tok) for tok in chunkTok if whiteTok(tok) is not None]
+        #lemmatize the tokens
+        lemmata = lemmatizer.lemmatize(chunkTok)
+        
+        #add lno and lemmata to a list and clear the chunk
+        #tokenBook.append([lno, lemmata])
+        #chunk = ''
+        
+        #add all the lemmatized tokens together in a string
+        lemons.append(lemmata)
+            
+        
+    #return tokenBook
+    return lemons
 
 #
 # main
@@ -66,38 +76,25 @@ def lemmatize(chunk):
 
 if __name__ == '__main__':
     
-    parser = argparse.ArgumentParser(
-        description='Populate corpus from remote CTS server'
-    )
-    parser.add_argument('--server', 
-        metavar='URL', type=str, default=Config.SERVER_URL,
-        help='remote CTS server')
-    parser.add_argument('--index', 
-        metavar="FILE", default=Config.INDEX_PATH,
-        help='corpus index file')
-    parser.add_argument('--dest', 
-        metavar="DIR", default=Config.LOCAL_BASE,
-        help='local corpus directory')
-
-    args = parser.parse_args()
-
+    countFile = 'wordCounts.tsv'
+    
     # Read the corpus metadata
-    with open(args.index) as f:
+    with open(Config.INDEX_PATH) as f:
         corpus = [Text.metaFromDict(rec) for rec in json.load(f)]
         
     # Read the JSON files
-    for text in corpus[:1]:
-        text.dataFromJson(os.path.join(args.dest, text.author + '.json'))
+    for text in corpus:
+        text.dataFromJson(os.path.join(Config.LOCAL_BASE, text.author + '.json'))
         
-        # TODO : call sample
-        samples = bind(text.lines)
-        lemmatized = []
-        count = 0
-        for sample in samples:
-            count = count + 1
-            lemmatized.append(lemmatize(sample))
-            print(count, '/', len(samples))
+        lemmatized = lemmanade(text.lines)
+        counts = Counter([lem for line in lemmatized for lem in line])
+        with open(countFile, 'w') as f:
+        
+            for word,count in counts.most_common():
+                line = word + '\t' + str(count) + '\n'
+                f.write(line)
             
-        #samples = [lemmatize(sample) for sample in bind(text.lines)]
-        
-       
+            #if number in counts > 1:
+                #hapaxLegomena.append([word, count])
+            
+    
