@@ -73,10 +73,9 @@ if __name__ == '__main__':
     for text in corpus:
         print('Processing {} {}'.format(text.author, text.title))
 
-        source = os.path.join(args.corpus, 'xml', text.urn)
+        source = os.path.join(args.corpus, 'xml', text.author)
 
         xml_files = [f for f in os.listdir(source) if f.endswith('.xml')]
-
         all_lines = []
 
         for i, file in enumerate(sorted(xml_files)):
@@ -85,7 +84,7 @@ if __name__ == '__main__':
             all_lines.extend(lines)
 
         # save verse lines
-        line_file = os.path.join(dest, text.urn + '.json')
+        line_file = os.path.join(dest, text.author + '.json')
         print(' - saving {}'.format(line_file))
         with open(line_file, 'w') as f:
             json.dump(all_lines, f, indent=1)

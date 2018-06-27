@@ -82,7 +82,7 @@ if __name__ == '__main__':
         print(' - {} {}'.format(text.author, text.title), end='...')
 
         # read feature file, sample
-        filename = os.path.join(Config.DATA, args.feature, text.urn + '.json')
+        filename = os.path.join(Config.DATA, args.feature, text.author + '.json')
         with open(filename) as f:
             features = json.load(f)
         sams = sampleMaker(features, args.size, args.offset )

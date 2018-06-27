@@ -46,8 +46,8 @@ def retrieveXML(resolver, text, dest):
         # extract xml and save
         xml = ctsPassage.export('python/lxml')
         
-        filename = os.path.join(dest, '{i:02d}_{urn}:{book}.xml'.format(
-            i=i, urn=text.urn, book=book))
+        filename = os.path.join(dest, '{i:02d}_{urn}-{book}.xml'.format(
+            i=i, urn=text.author, book=book))
         
         print(' - saving to {}'.format(filename))
         with open(filename, 'wb') as f:
@@ -90,6 +90,6 @@ if __name__ == '__main__':
     resolver = HttpCtsResolver(HttpCtsRetriever(args.server))
     
     for text in corpus:
-        retrieveXML(resolver, text, os.path.join(dest, text.urn))
+        retrieveXML(resolver, text, os.path.join(dest, text.author))
         print()
     
