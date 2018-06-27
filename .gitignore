@@ -1,3 +1,4 @@
 .spyproject
 data
 .DS_Store
+*.pdf

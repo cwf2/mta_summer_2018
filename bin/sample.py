@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 ''' Create a set of evenly-sized samples from the corpus
 '''
 
@@ -16,7 +17,6 @@ from mta_summer_2018 import Config, Text
 import gensim
 from sklearn import decomposition
 import numpy as np
-from matplotlib import pyplot
 
 #
 # functions
@@ -44,7 +44,7 @@ def sampleMaker(text, sampleSize, offset):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
-        description='create samples from the corpus'
+        description='Create samples from the corpus; plot.'
     )
     parser.add_argument('--size',
         metavar='N', type=int, default=30,
@@ -55,6 +55,9 @@ if __name__ == '__main__':
     parser.add_argument('--feature',
         metavar="NAME", default = 'lemmata',
         help='featureset to sample from')
+    parser.add_argument('--noninteractive',
+        action = 'store_const', const=True, default=False,
+        help="don't try to display results interactively")
 
 
     args = parser.parse_args()
@@ -121,6 +124,13 @@ if __name__ == '__main__':
     # output
     #
 
+    # if noninteractive, default to pdf output
+    if args.noninteractive:
+        import matplotlib
+        matplotlib.use('PDF')
+        output_file = 'plot.{} {} {}.pdf'.format(args.feature, args.size, args.offset)
+    from matplotlib import pyplot
+
     # plot
     # FIXME : in progress ...
 
@@ -134,4 +144,8 @@ if __name__ == '__main__':
         ax.plot(pca[labels==l,0], pca[labels==l,1], ls='', marker='o',
             color='C'+str(i), label=l)
     fig.legend()
-    fig.show()
+    
+    if args.noninteractive:
+        fig.savefig(output_file)
+    else:
+        fig.show()
