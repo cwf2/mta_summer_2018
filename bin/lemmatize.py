@@ -108,13 +108,13 @@ if __name__ == '__main__':
     for text in corpus:
         print(" - {} {}".format(text.author, text.title))
         
-        text.dataFromJson(os.path.join(source, text.urn + '.json'))
+        text.dataFromJson(os.path.join(source, text.author + '.json'))
         
         # tokenize and lemmatize
         lemmatized = lemmanade(text.lines)
         
         # save lemmata
-        filename = os.path.join(dest, text.urn + '.json')
+        filename = os.path.join(dest, text.author + '.json')
         with open(filename, 'w') as f:
             json.dump(lemmatized, f)
             
