@@ -89,11 +89,9 @@ if __name__ == '__main__':
         labels.extend([text.author] * len(sams))
         samples.extend(sams)
 
-    # create gensim dictionary
-    dictionary = gensim.corpora.Dictionary(samples)
-    dict_file = os.path.join(Config.DATA, args.feature + 'gensim.dict')
-    print('Writing dictionary {}'.format(dict_file))
-    dictionary.save(dict_file)
+    # load gensim dictionary
+    dict_file = os.path.join(Config.DATA, args.feature, 'gensim.dict')
+    dictionary = gensim.corpora.Dictionary.load(dict_file)
 
     #
     # transformations

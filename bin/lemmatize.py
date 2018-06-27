@@ -10,8 +10,10 @@ import os
 import sys
 import json
 import shutil
+import argparse
 from collections import Counter
 
+import gensim
 from cltk.stem.latin.j_v import JVReplacer
 from cltk.tokenize.word import WordTokenizer
 from cltk.stem.lemma import LemmaReplacer
@@ -66,13 +68,21 @@ def lemmanade(lines):
 # main
 #
 
-if __name__ == '__main__':
+if __name__ == '__main__':    
+    parser = argparse.ArgumentParser(
+        description='Extract features from texts'
+    )
+    parser.add_argument('--feature',
+        metavar="NAME", default = 'lemmata',
+        help='Featureset to create')
+
+    args = parser.parse_args()
+    
     # paths
     source = os.path.join(Config.DATA, 'lines')
-    dest = os.path.join(Config.DATA, 'lemmata')
-    count_file = os.path.join(Config.DATA, 'wordCounts.tsv')
+    dest = os.path.join(Config.DATA, args.feature)
 
-    print("Cleaning lemma directory {}".format(dest))
+    print("Cleaning destination directory {}".format(dest))
 
     # clean destination directory
     if os.path.exists(dest):
@@ -85,8 +95,12 @@ if __name__ == '__main__':
     with open(Config.INDEX) as f:
         corpus = [Text.metaFromDict(rec) for rec in json.load(f)]
 
-    # initialize word counts
+    # initialize feature counts
     counts = Counter()
+    
+    # corpus-wide featureset for creating gensim dictionary
+    all_features = []
+    
     
     print("Lemmatizing...")
     
@@ -106,12 +120,22 @@ if __name__ == '__main__':
             
         # update word counts
         counts.update([lem for line in lemmatized for lem in line])
+
+        # update corpus-wide featureset
+        all_features.extend(lemmatized)
+
+    # create gensim dictionary
+    dict_file = os.path.join(dest, 'gensim.dict')
+    print('Writing dictionary {}'.format(dict_file))
+
+    dictionary = gensim.corpora.Dictionary(all_features)
+    dictionary.save(dict_file)
         
     # write word counts
-    print('Writing word counts to ' + count_file)
+    count_file = os.path.join(dest, 'wordCounts.tsv')
+    print('Writing feature counts to {}'.format(count_file))
     
     with open(count_file, 'w') as f:
-    
         for word,count in counts.most_common():
             line = word + '\t' + str(count) + '\n'
             f.write(line)
