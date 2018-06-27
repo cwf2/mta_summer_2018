@@ -35,7 +35,7 @@ Using the lemmanade() function, the script recalls the local json files, tokeniz
 
 5.)File: sample.py
 
-Creates sets of evenly sized samples, which can be adjusted for multiple results. The script iterates over all of the texts and uses the samples and the gensim dictionary to generate a set of vectors to be represented on a lexical dispersion plot and free to be interpreted. 
+Creates sets of evenly sized samples from the stored word counts and lemmata, which can be adjusted for multiple results. The script iterates over all of the texts and uses the samples and the gensim dictionary to generate a set of vectors to be represented on a lexical dispersion plot and free to be interpreted. 
 
 
 
