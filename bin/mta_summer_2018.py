@@ -1,9 +1,9 @@
 '''Common project config and utilities
 '''
 
+import re
 import os
 import json
-import numpy as np
 
 #
 # Set default paths, CTS server here
@@ -12,9 +12,9 @@ import numpy as np
 class Config(object):
     '''Configuration values'''
     
-    SERVER_URL = 'http://cts.perseids.org/api/cts/'
-    INDEX_PATH = os.path.join('conf', 'corpus.json')
-    LOCAL_BASE = os.path.join('data', 'corpus')
+    SERVER = 'http://cts.perseids.org/api/cts/'
+    INDEX = os.path.join('conf', 'corpus.json')
+    DATA = os.path.join('data', 'corpus')
 
 
 class Text(object):
@@ -28,6 +28,7 @@ class Text(object):
         self.lines = None
         self.loci = None
     
+    
     def __repr__(self):
         return('<Text {}: {} {}>'.format(self.urn, self.author, self.title))
     
@@ -35,14 +36,17 @@ class Text(object):
     def dataFromJson(self, file):
         '''Load loci and verse lines from JSON file'''
 
-        # read from the JSON file
-        with open(file) as f:
-            data = np.array(json.load(f))
-        
         # wipe any existing data
-        self.loci = data[:,0]
-        self.lines = data[:,1]
-        
+        self.loci = []
+        self.lines = []
+
+        # read from the JSON files
+        with open(file) as f:
+            data = json.load(f)
+            for loc, verse in data:
+                self.loci.append(loc)
+                self.lines.append(verse)
+
     
     @classmethod
     def metaFromDict(self, rec):

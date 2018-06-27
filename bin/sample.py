@@ -10,7 +10,6 @@ import sys
 import json
 import argparse
 
-from collections import Counter
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from mta_summer_2018 import Config, Text
 
@@ -53,37 +52,63 @@ if __name__ == '__main__':
     parser.add_argument('--offset',
         metavar="N", default = 0,
         help='offset in lines')
+    parser.add_argument('--feature',
+        metavar="NAME", default = 'lemmata',
+        help='featureset to sample from')
 
 
     args = parser.parse_args()
 
 
+    #
+    # sampling
+    #
+
+    print('Sampling {}: size={}; offset={}'.format(args.feature, args.size, args.offset))
+
     # Read the corpus metadata
-    with open(Config.INDEX_PATH) as f:
+    with open(Config.INDEX) as f:
         corpus = [Text.metaFromDict(rec) for rec in json.load(f)]
-    counts = Counter()
-    # Read the JSON files
+    
+    # initialize corpus-wide samples, labels
     samples = []
     labels = []
-    for text in corpus:
 
-        filename = os.path.join(Config.LOCAL_BASE, text.author + '_lem.json')
+    # iterate over texts
+    for text in corpus:
+        print(' - {} {}'.format(text.author, text.title), end='...')
+
+        # read feature file, sample
+        filename = os.path.join(Config.DATA, args.feature, text.urn + '.json')
         with open(filename) as f:
-            lemmatized = json.load(f)
-        sams = sampleMaker(lemmatized, args.size, args.offset )
+            features = json.load(f)
+        sams = sampleMaker(features, args.size, args.offset )
+        print('{} samples'.format(len(sams)))
+        
+        # add these samples, labels to master lists
         labels.extend([text.author] * len(sams))
         samples.extend(sams)
 
     # create gensim dictionary
     dictionary = gensim.corpora.Dictionary(samples)
-    #dict_file = os.path.join(Config.DATA, 'gensim', args.lemfile + '.dict')
-    #dictionary.save(dict_file)
+    dict_file = os.path.join(Config.DATA, args.feature + 'gensim.dict')
+    print('Writing dictionary {}'.format(dict_file))
+    dictionary.save(dict_file)
+
+    #
+    # transformations
+    #
 
     # create vector model
+    print('Building vector model')
     vec = [dictionary.doc2bow(sample) for sample in samples]
 
     # tfidf weighting
     # TODO
+
+    #
+    # dimensionality reduction
+    #
 
     # convert gensim vectors to numpy matrix
     m = gensim.matutils.corpus2dense(vec, num_terms=len(dictionary))
@@ -94,10 +119,12 @@ if __name__ == '__main__':
     pcmodel = decomposition.PCA(npcs)
     pca = pcmodel.fit_transform(m)
 
+    #
+    # output
+    #
+
     # plot
-    # FIXME in progress ...
-    import numpy as np
-    from matplotlib import pyplot
+    # FIXME : in progress ...
 
     labels = np.array(labels)
     fig = pyplot.figure(figsize=(8,5))
