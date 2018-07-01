@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 env
-=======
 .spyproject
 data
 .DS_Store
 *.pdf
->>>>>>> origin

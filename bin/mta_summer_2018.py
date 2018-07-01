@@ -11,7 +11,7 @@ import json
 
 class Config(object):
     '''Configuration values'''
-
+    
     SERVER = 'http://cts.perseids.org/api/cts/'
     INDEX = os.path.join('conf', 'corpus.json')
     DATA = os.path.join('data', 'corpus')
@@ -19,7 +19,7 @@ class Config(object):
 
 class Text(object):
     '''Metadata for one text'''
-
+    
     def __init__(self, author=None, title=None, lang=None, urn=None):
         self.author = author
         self.title = title
@@ -27,12 +27,12 @@ class Text(object):
         self.urn = urn
         self.lines = None
         self.loci = None
-
-
+    
+    
     def __repr__(self):
         return('<Text {}: {} {}>'.format(self.urn, self.author, self.title))
-
-
+    
+    
     def dataFromJson(self, file):
         '''Load loci and verse lines from JSON file'''
 
@@ -47,11 +47,11 @@ class Text(object):
                 self.loci.append(loc)
                 self.lines.append(verse)
 
-
+    
     @classmethod
     def metaFromDict(self, rec):
         '''Create a new text object from a dictionary'''
-
+        
         return self(
             author = rec.get('author', None),
             title = rec.get('title', None),
