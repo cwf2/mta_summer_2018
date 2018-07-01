@@ -18,6 +18,9 @@ import gensim
 from sklearn import decomposition
 import numpy as np
 
+import matplotlib
+from matplotlib import pyplot
+
 #
 # functions
 #
@@ -62,12 +65,20 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    label = '{f}_{s}-{o}'.format(
+        f = args.feature,
+        s = args.size,
+        o = args.offset
+    )
 
     #
     # sampling
     #
 
-    print('Sampling {}: size={}; offset={}'.format(args.feature, args.size, args.offset))
+    print('Sampling {f}: size={s}; offset={o}'.format(
+        f = args.feature,
+        s = args.size,
+        o = args.offset))
 
     # Read the corpus metadata
     with open(Config.INDEX) as f:
@@ -105,18 +116,20 @@ if __name__ == '__main__':
     vec = [dictionary.doc2bow(sample) for sample in samples]
 
     # tfidf weighting
-    # TODO
+    tfidf_model = gensim.models.TfidfModel(vec)
+    tfidf = tfidf_model[vec]
+
+    # convert gensim vectors to numpy matrix
+    m = gensim.matutils.corpus2dense(tfidf, num_terms=len(dictionary))
+    m = m.transpose()
 
     #
     # dimensionality reduction
     #
 
-    # convert gensim vectors to numpy matrix
-    m = gensim.matutils.corpus2dense(vec, num_terms=len(dictionary))
-    m = m.transpose()
-
     # pca
     npcs = 10
+    print('Calculating {} principal components'.format(npcs))
     pcmodel = decomposition.PCA(npcs)
     pca = pcmodel.fit_transform(m)
 
@@ -124,31 +137,28 @@ if __name__ == '__main__':
     # output
     #
 
-    # if noninteractive, default to pdf output
-    if args.noninteractive:
-        import matplotlib
-        matplotlib.use('PDF')
-        output_file = 'plot_{f}_{s}-{o}.pdf'.format(
-            f = args.feature,
-            s = args.size,
-            o = args.offset)
-    from matplotlib import pyplot
-
-    # plot
-    # FIXME : in progress ...
-
+    print('Plotting')
     labels = np.array(labels)
+
+    # create figure, canvas
     fig = pyplot.figure(figsize=(8,5))
     ax = fig.add_axes([.1,.1,.6,.8])
     ax.set_title('Samples of {} lines'.format(args.size))
     ax.set_xlabel('PC1')
     ax.set_ylabel('PC2')
+
+    # plot each author as a separate series
     for i, l in enumerate(sorted(set(labels))):
         ax.plot(pca[labels==l,0], pca[labels==l,1], ls='', marker='o',
             color='C'+str(i), label=l)
+
+    # add legend
     fig.legend()
 
+    # if noninteractive, default to pdf output
     if args.noninteractive:
+        output_file = 'plot_{}.pdf'.format(label)
+        print('Saving plot to {}'.format(output_file))
         fig.savefig(output_file)
     else:
         fig.show()

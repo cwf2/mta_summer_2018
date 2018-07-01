@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-''' Modified from lemmatize.py
+''' Create a new featureset using lemmata exported from type-scenes-jdmdh
 '''
 
 #
