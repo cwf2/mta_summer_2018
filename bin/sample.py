@@ -18,9 +18,6 @@ import gensim
 from sklearn import decomposition
 import numpy as np
 
-import matplotlib
-from matplotlib import pyplot
-
 #
 # functions
 #
@@ -127,6 +124,16 @@ if __name__ == '__main__':
     # output
     #
 
+    # if noninteractive, default to pdf output
+    if args.noninteractive:
+        import matplotlib
+        matplotlib.use('PDF')
+        output_file = 'plot_{f}_{s}-{o}.pdf'.format(
+            f = args.feature,
+            s = args.size,
+            o = args.offset)
+    from matplotlib import pyplot
+
     # plot
     # FIXME : in progress ...
 
@@ -136,17 +143,12 @@ if __name__ == '__main__':
     ax.set_title('Samples of {} lines'.format(args.size))
     ax.set_xlabel('PC1')
     ax.set_ylabel('PC2')
-    for i, l in enumerate(set(labels)):
+    for i, l in enumerate(sorted(set(labels))):
         ax.plot(pca[labels==l,0], pca[labels==l,1], ls='', marker='o',
             color='C'+str(i), label=l)
     fig.legend()
 
-    # if noninteractive, default to pdf output
     if args.noninteractive:
-        output_file = 'plot_{f}_{s}-{o}.pdf'.format(
-            f = args.feature,
-            s = args.size,
-            o = args.offset)
         fig.savefig(output_file)
     else:
         fig.show()
