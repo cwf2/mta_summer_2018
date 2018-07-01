@@ -71,7 +71,7 @@ if __name__ == '__main__':
         dest_file = os.path.join(dest, author + '.json')
         print('Writing {}'.format(dest_file))
         with open(dest_file, 'w') as f:
-            json.dump(list(all_features[labels==author]), f)
+            json.dump(list(all_features[labels==author]), f, indent=1)
 
     # get feature counts
     print("Generating feature counts")
