@@ -47,29 +47,32 @@ def sampleMaker(text, sampleSize, offset):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
-        description='Create samples from the corpus; plot.'
+        description='Divide features into even-sized samples and plot.'
     )
     parser.add_argument('--size',
-        metavar='N', type=int, default=30,
-        help='sample size in lines')
+        metavar='SIZE', type=int, default=30,
+        help='Make samples of SIZE lines. Default 30.')
     parser.add_argument('--offset',
-        metavar="N", default = 0,
-        help='offset in lines')
+        metavar='OFFSET', type=int, default = 0,
+        help='Shift samples by OFFSET lines. Default 0.')
     parser.add_argument('--feature',
-        metavar="NAME", default = 'lemmata',
-        help='featureset to sample from')
+        metavar='FEAT', type=str, default = 'lemmata',
+        help='Featureset to sample. Default "lemmata".')
+    parser.add_argument('--label',
+        metavar='LABEL', type=str, default=None,
+        help='Trial label (for graph). Default "FEAT-SIZE-OFFSET"')
     parser.add_argument('--noninteractive',
         action = 'store_const', const=True, default=False,
-        help="don't try to display results interactively")
+        help="Don't try to display results interactively.")
 
 
     args = parser.parse_args()
 
-    label = '{f}_{s}-{o}'.format(
-        f = args.feature,
-        s = args.size,
-        o = args.offset
-    )
+    if args.label is None:
+        args.label = '{f}-{s}-{o}'.format(
+            f = args.feature,
+            s = args.size,
+            o = args.offset)
 
     #
     # sampling
@@ -157,7 +160,7 @@ if __name__ == '__main__':
 
     # if noninteractive, default to pdf output
     if args.noninteractive:
-        output_file = 'plot_{}.pdf'.format(label)
+        output_file = 'plot_{}.pdf'.format(args.label)
         print('Saving plot to {}'.format(output_file))
         fig.savefig(output_file)
     else:
