@@ -143,6 +143,16 @@ if __name__ == '__main__':
     print('Plotting')
     labels = np.array(labels)
 
+    # try to simulate R Color Brewer's Set 1
+    colors = [
+        '#ff0000', # red
+        '#0000dd', # blue
+        '#00dd00', # green
+        '#8800aa', # purple
+        '#ff8800', # orange
+        '#eeee00', # yellow
+    ]
+
     # create figure, canvas
     fig = pyplot.figure(figsize=(8,5))
     ax = fig.add_axes([.1,.1,.6,.8])
@@ -153,7 +163,7 @@ if __name__ == '__main__':
     # plot each author as a separate series
     for i, l in enumerate(sorted(set(labels))):
         ax.plot(pca[labels==l,0], pca[labels==l,1], ls='', marker='o',
-            color='C'+str(i), label=l)
+            color=colors[i], label=l)
 
     # add legend
     fig.legend()
