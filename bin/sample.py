@@ -146,7 +146,7 @@ if __name__ == '__main__':
     # create figure, canvas
     fig = pyplot.figure(figsize=(8,5))
     ax = fig.add_axes([.1,.1,.6,.8])
-    ax.set_title('Samples of {} lines'.format(args.size))
+    ax.set_title(args.label)
     ax.set_xlabel('PC1')
     ax.set_ylabel('PC2')
 
@@ -160,7 +160,7 @@ if __name__ == '__main__':
 
     # if noninteractive, default to pdf output
     if args.noninteractive:
-        output_file = 'plot_{}.pdf'.format(args.label)
+        output_file = 'plot_{}.png'.format(args.label)
         print('Saving plot to {}'.format(output_file))
         fig.savefig(output_file)
     else:
