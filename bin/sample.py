@@ -25,20 +25,26 @@ from matplotlib import pyplot
 # functions
 #
 
-def sampleMaker(text, sampleSize, offset):
+def sampleMaker(lines, sample_size, offset):
 
     count = 0
     chunk = []
     book = []
 
-    for verse in text[:]:
+    for line in lines:
         count = count + 1
-        chunk.extend(verse)
-        if count % sampleSize == offset:
+        chunk.extend(line)
+        if count % sample_size == offset:
             book.append(chunk)
             chunk = []
 
     return book
+
+def labelledSamples(text, sample_size, offset):
+    samples = sampleMaker(text.lines, sample_size, offset)
+    loci = sampleMaker([[l] for l in text.loci], sample_size, offset)
+    labels = [s[0] for s in loci]
+    return samples, labels
 
 #
 # main
@@ -94,6 +100,7 @@ if __name__ == '__main__':
     # iterate over texts
     for text in corpus:
         print(' - {} {}'.format(text.author, text.title), end='...')
+        text.dataFromJson(os.path.join(Config.DATA, 'lines', text.author + '.json'))
 
         # read feature file, sample
         filename = os.path.join(Config.DATA, args.feature, text.author + '.json')
