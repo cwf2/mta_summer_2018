@@ -40,11 +40,43 @@ def sampleMaker(lines, sample_size, offset):
 
     return book
 
-def labelledSamples(text, sample_size, offset):
-    samples = sampleMaker(text.lines, sample_size, offset)
-    loci = sampleMaker([[l] for l in text.loci], sample_size, offset)
-    labels = [s[0] for s in loci]
-    return samples, labels
+
+def plotAuthor(auth, filename):
+    '''plot one author'''
+    
+    print('Drawing detailed plot for {}'.format(auth))
+    
+    # create figure, canvas
+    fig = pyplot.figure(figsize=(8,5))
+    ax = fig.add_axes([.1,.1,.8,.8])
+    ax.set_title('Python - {}'.format(auth))
+    ax.set_xlabel('PC1')
+    ax.set_ylabel('PC2')
+
+    # plot as above, but with no points
+    ax.plot(x=pca[labels==auth,0], y=pca[labels==auth,1],
+        ls='', marker='')
+
+    # add locus tags at every x,y point
+    for x, y, loc in zip(pca[labels==auth,0], pca[labels==auth,1],
+        [l[0] for l in loci[labels==auth]]):
+        ax.text(x, y, loc, fontsize=6)
+
+    # save
+    print('Writing {}'.format(filename))
+    fig.savefig(filename)
+
+
+
+
+def findLoc(auth, loc):
+    '''Return sample index containing given passage'''
+    
+    in_auth = np.arange(len(labels))[labels==auth]
+    
+    for i in in_auth:
+        if loc in loci[i]:
+            return i
 
 #
 # main
@@ -96,6 +128,7 @@ if __name__ == '__main__':
     # initialize corpus-wide samples, labels
     samples = []
     labels = []
+    loci = []
 
     # iterate over texts
     for text in corpus:
@@ -112,6 +145,10 @@ if __name__ == '__main__':
         # add these samples, labels to master lists
         labels.extend([text.author] * len(sams))
         samples.extend(sams)
+        
+        # save the loci as well
+        loci.extend(sampleMaker([[l] for l in text.loci], 
+            args.size, args.offset))
 
     # load gensim dictionary
     dict_file = os.path.join(Config.DATA, args.feature, 'gensim.dict')
@@ -149,6 +186,7 @@ if __name__ == '__main__':
 
     print('Plotting')
     labels = np.array(labels)
+    loci = np.array(loci)
 
     # try to simulate R Color Brewer's Set 1
     colors = [
@@ -182,3 +220,10 @@ if __name__ == '__main__':
         fig.savefig(output_file)
     else:
         fig.show()
+        
+    #
+    # individual plots for all authors
+    #
+    
+    for l in sorted(set(labels)):
+        plotAuthor(auth=l, filename="plot_py_{}.pdf".format(l))
