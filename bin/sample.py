@@ -106,7 +106,8 @@ if __name__ == '__main__':
 
     # tfidf weighting
     # TODO
-
+    tfidfModel = gensim.models.TfidfModel(vec)
+    tfidf = tfidfModel[vec]
     #
     # dimensionality reduction
     #

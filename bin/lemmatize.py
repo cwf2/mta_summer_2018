@@ -41,7 +41,7 @@ def lemmanade(lines):
     lemons = []
 
     # initialize cltk tools
-    jvReplace = JVReplacer()
+    #jvReplace = JVReplacer()
     wordTokenizer = WordTokenizer('latin')
     lemmatizer = LemmaReplacer('latin')
         
@@ -50,14 +50,15 @@ def lemmanade(lines):
         count = count + 1
         
         # lowercase
-        verse = jvReplace.replace(verse.lower())
+        #verse = jvReplace.replace(verse.lower())
         
         #tokenize the words
-        chunkTok = wordTokenizer.tokenize(verse)
+        chunkTok = wordTokenizer.tokenize(verse.lower())
         chunkTok = [whiteTok(tok) for tok in chunkTok if whiteTok(tok) is not None]
 
         #lemmatize the tokens
         lemmata = lemmatizer.lemmatize(chunkTok)
+        
                 
         #add all the lemmatized tokens together in a string
         lemons.append(lemmata)
@@ -123,12 +124,14 @@ if __name__ == '__main__':
 
         # update corpus-wide featureset
         all_features.extend(lemmatized)
+        
 
     # create gensim dictionary
     dict_file = os.path.join(dest, 'gensim.dict')
     print('Writing dictionary {}'.format(dict_file))
 
     dictionary = gensim.corpora.Dictionary(all_features)
+    dictionary.filter_extremes(no_below = 5)
     dictionary.save(dict_file)
         
     # write word counts
