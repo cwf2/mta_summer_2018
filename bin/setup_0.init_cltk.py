@@ -25,11 +25,11 @@ def runTest(text):
    print(' -> ' + text)
    print()
 
-   print('[1/3] Testing JVReplacer')
-   jv = JVReplacer()
-   text = jv.replace(text)
-   print(' -> ' + text)
-   print()
+#   print('[1/3] Testing JVReplacer')
+#   jv = JVReplacer()
+#   text = jv.replace(text)
+#   print(' -> ' + text)
+#   print()
 
    print('[2/3] Testing WordTokenizer')
    tokenizer = WordTokenizer('latin')
