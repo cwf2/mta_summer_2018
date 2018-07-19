@@ -26,6 +26,7 @@ from matplotlib import pyplot
 #
 
 def sampleMaker(lines, sample_size, offset):
+    '''Create samples of consecutive lines'''
 
     count = 0
     chunk = []
@@ -39,12 +40,6 @@ def sampleMaker(lines, sample_size, offset):
             chunk = []
 
     return book
-
-def labelledSamples(text, sample_size, offset):
-    samples = sampleMaker(text.lines, sample_size, offset)
-    loci = sampleMaker([[l] for l in text.loci], sample_size, offset)
-    labels = [s[0] for s in loci]
-    return samples, labels
 
 #
 # main
@@ -71,7 +66,6 @@ if __name__ == '__main__':
         action = 'store_const', const=True, default=False,
         help="Don't try to display results interactively.")
 
-
     args = parser.parse_args()
 
     if args.label is None:
@@ -79,6 +73,11 @@ if __name__ == '__main__':
             f = args.feature,
             s = args.size,
             o = args.offset)
+
+    # clean cache dir
+    cache = os.path.join(Config.DATA, 'cache', args.label)
+    if not os.path.exists(cache):
+        os.makedirs(cache)
 
     #
     # sampling
@@ -95,7 +94,8 @@ if __name__ == '__main__':
 
     # initialize corpus-wide samples, labels
     samples = []
-    labels = []
+    loci = []
+    authors = []
 
     # iterate over texts
     for text in corpus:
@@ -106,20 +106,34 @@ if __name__ == '__main__':
         filename = os.path.join(Config.DATA, args.feature, text.author + '.json')
         with open(filename) as f:
             features = json.load(f)
-        sams = sampleMaker(features, args.size, args.offset )
+        sams = sampleMaker(features, args.size, args.offset)
+        locs = sampleMaker([[l] for l in text.loci], args.size, args.offset)
         print('{} samples'.format(len(sams)))
 
         # add these samples, labels to master lists
-        labels.extend([text.author] * len(sams))
+        authors.extend([text.author] * len(sams))
+        loci.extend(locs)
         samples.extend(sams)
+
+    # save author labels
+    authors = np.array(authors)
+    author_file = os.path.join(cache, 'authors.txt')
+    print('Writing {}'.format(author_file))
+    np.savetxt(author_file, authors, fmt='%s')
+
+    # save loci
+    loci_file = os.path.join(cache, 'loci.txt')
+    print('Writing {}'.format(loci_file))
+    with open(loci_file, 'w') as f:
+        json.dump(loci, f)
+
+    #
+    # feature extraction
+    #
 
     # load gensim dictionary
     dict_file = os.path.join(Config.DATA, args.feature, 'gensim.dict')
     dictionary = gensim.corpora.Dictionary.load(dict_file)
-
-    #
-    # transformations
-    #
 
     # create vector model
     print('Building vector model')
@@ -133,22 +147,30 @@ if __name__ == '__main__':
     m = gensim.matutils.corpus2dense(tfidf, num_terms=len(dictionary))
     m = m.transpose()
 
+    # save TF-IDF features
+    tfidf_file = os.path.join(cache, 'tfidf.txt')
+    print('Writing {}'.format(tfidf_file))
+    np.savetxt(m, tfidf_file)
+
     #
     # dimensionality reduction
     #
 
-    # pca
+    # PCA
     npcs = 10
     print('Calculating {} principal components'.format(npcs))
     pcmodel = decomposition.PCA(npcs)
     pca = pcmodel.fit_transform(m)
+
+    # save PCA features
+    pca_file = os.path.join(cache, 'pca.txt')
+    np.savetxt(pca_file, pca)
 
     #
     # output
     #
 
     print('Plotting')
-    labels = np.array(labels)
 
     # try to simulate R Color Brewer's Set 1
     colors = [
@@ -168,9 +190,9 @@ if __name__ == '__main__':
     ax.set_ylabel('PC2')
 
     # plot each author as a separate series
-    for i, l in enumerate(sorted(set(labels))):
-        ax.plot(pca[labels==l,0], pca[labels==l,1], ls='', marker='o',
-            color=colors[i], label=l)
+    for i, auth in enumerate(sorted(set(authors))):
+        ax.plot(pca[authors==auth,0], pca[authors==auth,1], ls='', marker='o',
+            color=colors[i], label=auth)
 
     # add legend
     fig.legend()
