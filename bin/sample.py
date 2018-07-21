@@ -18,9 +18,6 @@ import gensim
 from sklearn import decomposition
 import numpy as np
 
-import matplotlib
-from matplotlib import pyplot
-
 #
 # functions
 #
@@ -115,6 +112,10 @@ if __name__ == '__main__':
         loci.extend(locs)
         samples.extend(sams)
 
+        # save the loci as well
+        loci.extend(sampleMaker([[l] for l in text.loci],
+            args.size, args.offset))
+
     # save author labels
     authors = np.array(authors)
     author_file = os.path.join(cache, 'authors.txt')
@@ -150,7 +151,7 @@ if __name__ == '__main__':
     # save TF-IDF features
     tfidf_file = os.path.join(cache, 'tfidf.txt')
     print('Writing {}'.format(tfidf_file))
-    np.savetxt(m, tfidf_file)
+    np.savetxt(tfidf_file, m)
 
     #
     # dimensionality reduction
@@ -170,37 +171,4 @@ if __name__ == '__main__':
     # output
     #
 
-    print('Plotting')
-
-    # try to simulate R Color Brewer's Set 1
-    colors = [
-        '#ff0000', # red
-        '#0000dd', # blue
-        '#00dd00', # green
-        '#8800aa', # purple
-        '#ff8800', # orange
-        '#eeee00', # yellow
-    ]
-
-    # create figure, canvas
-    fig = pyplot.figure(figsize=(8,5))
-    ax = fig.add_axes([.1,.1,.6,.8])
-    ax.set_title(args.label)
-    ax.set_xlabel('PC1')
-    ax.set_ylabel('PC2')
-
-    # plot each author as a separate series
-    for i, auth in enumerate(sorted(set(authors))):
-        ax.plot(pca[authors==auth,0], pca[authors==auth,1], ls='', marker='o',
-            color=colors[i], label=auth)
-
-    # add legend
-    fig.legend()
-
-    # if noninteractive, default to pdf output
-    if args.noninteractive:
-        output_file = 'plot_{}.png'.format(args.label)
-        print('Saving plot to {}'.format(output_file))
-        fig.savefig(output_file)
-    else:
-        fig.show()
+    # moved to plot_pca.py
