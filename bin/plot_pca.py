@@ -254,19 +254,8 @@ if __name__ == '__main__':
     print('Plotting')
 
     # create figure, canvas
-    fig = pyplot.figure(figsize=(8,5))
-    ax = fig.add_axes([.1,.1,.6,.8])
-    ax.set_title(args.title)
-    ax.set_xlabel('PC1')
-    ax.set_ylabel('PC2')
-
-    # plot each author as a separate series
-    for i, auth in enumerate(sorted(set(authors))):
-        ax.plot(pca[authors==auth,0], pca[authors==auth,1], ls='', marker='o',
-            color=COLORS[i], label=auth)
-
-    # add legend
-    fig.legend()
+    fig = basePlot(xs=pca[:,0], ys=pca[:,1],
+        labels=authors, colors=COLORS, title=args.title)
 
     # write output
     if args.out is None:
