@@ -46,7 +46,7 @@ SHADOW = [
 # functions
 #
 
-def basePlot(xs, ys, labels, colors, title):
+def basePlot(xs, ys, labels, colors=COLORS, title=None):
     '''Basic plot'''
 
     # if we're going to have a legend, adjust figure width to make room
@@ -58,7 +58,8 @@ def basePlot(xs, ys, labels, colors, title):
     # create figure, canvas
     fig = pyplot.figure(figsize=(8,5))
     ax = fig.add_axes([.1, .1, w, .8])
-    ax.set_title(title)
+    if title is not None:
+        ax.set_title(title)
     ax.set_xlabel('PC1')
     ax.set_ylabel('PC2')
 
@@ -112,7 +113,7 @@ class Trial(object):
         print('Reading {}'.format(file_loci))
         with open(file_loci) as f:
           self.loci = json.load(f)
-          self.firstlines = [l[0] for l in self.loci]
+          self.firstlines = np.array([l[0] for l in self.loci])
 
 
     def _loadPCA(self):
