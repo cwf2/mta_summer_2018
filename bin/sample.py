@@ -45,7 +45,7 @@ def sampleMaker(lines, sample_size, offset):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
-        description='Divide features into even-sized samples and plot.'
+        description='Divide features into even-sized samples.'
     )
     parser.add_argument('--size',
         metavar='SIZE', type=int, default=30,
@@ -58,10 +58,7 @@ if __name__ == '__main__':
         help='Featureset to sample. Default "lemmata".')
     parser.add_argument('--label',
         metavar='LABEL', type=str, default=None,
-        help='Trial label (for graph). Default "FEAT-SIZE-OFFSET"')
-    parser.add_argument('--noninteractive',
-        action = 'store_const', const=True, default=False,
-        help="Don't try to display results interactively.")
+        help='Trial label. Default "FEAT-SIZE-OFFSET"')
 
     args = parser.parse_args()
 
@@ -111,10 +108,6 @@ if __name__ == '__main__':
         authors.extend([text.author] * len(sams))
         loci.extend(locs)
         samples.extend(sams)
-
-        # save the loci as well
-        loci.extend(sampleMaker([[l] for l in text.loci],
-            args.size, args.offset))
 
     # save author labels
     authors = np.array(authors)
