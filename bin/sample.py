@@ -22,21 +22,18 @@ import numpy as np
 # functions
 #
 
-def sampleMaker(lines, sample_size, offset):
+def sampleMaker(lines, size, step, offset):
     '''Create samples of consecutive lines'''
 
-    count = 0
-    chunk = []
-    book = []
+    samples = []
 
-    for line in lines:
-        count = count + 1
-        chunk.extend(line)
-        if count % sample_size == offset:
-            book.append(chunk)
-            chunk = []
+    for start in range(offset, len(lines)-size, step):
+        this_sample = []
+        for l in lines[start:(start+size)]:
+            this_sample.extend(l)
+        samples.append(this_sample)
 
-    return book
+    return samples
 
 #
 # main
@@ -45,7 +42,7 @@ def sampleMaker(lines, sample_size, offset):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
-        description='Divide features into even-sized samples.'
+        description='Create samples from the corpus, either in contiguous chunks (default) or using a sliding window.'
     )
     parser.add_argument('--size',
         metavar='SIZE', type=int, default=30,
@@ -53,6 +50,9 @@ if __name__ == '__main__':
     parser.add_argument('--offset',
         metavar='OFFSET', type=int, default = 0,
         help='Shift samples by OFFSET lines. Default 0.')
+    parser.add_argument('--step',
+        metavar='STEP', default = None,
+        help='Move window by STEP lines each time. Default SIZE (no overlap between samples).')
     parser.add_argument('--feature',
         metavar='FEAT', type=str, default = 'lemmata',
         help='Featureset to sample. Default "lemmata".')
@@ -62,11 +62,16 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    # set the default series label
     if args.label is None:
         args.label = '{f}-{s}-{o}'.format(
             f = args.feature,
             s = args.size,
             o = args.offset)
+            
+    # set the default step size
+    if args.step is None:
+        args.step = args.size
 
     # clean cache dir
     cache = os.path.join(Config.DATA, 'cache', args.label)
@@ -77,9 +82,10 @@ if __name__ == '__main__':
     # sampling
     #
 
-    print('Sampling {f}: size={s}; offset={o}'.format(
+    print('Sampling {f}: size={s}; step={t}; offset={o}'.format(
         f = args.feature,
         s = args.size,
+        t = args.step,
         o = args.offset))
 
     # Read the corpus metadata
@@ -100,8 +106,8 @@ if __name__ == '__main__':
         filename = os.path.join(Config.DATA, args.feature, text.author + '.json')
         with open(filename) as f:
             features = json.load(f)
-        sams = sampleMaker(features, args.size, args.offset)
-        locs = sampleMaker([[l] for l in text.loci], args.size, args.offset)
+        sams = sampleMaker(features, args.size, args.step, args.offset)
+        locs = sampleMaker([[l] for l in text.loci], args.size, args.step, args.offset)
         print('{} samples'.format(len(sams)))
 
         # add these samples, labels to master lists
@@ -159,9 +165,3 @@ if __name__ == '__main__':
     # save PCA features
     pca_file = os.path.join(cache, 'pca.txt')
     np.savetxt(pca_file, pca)
-
-    #
-    # output
-    #
-
-    # moved to plot_pca.py
