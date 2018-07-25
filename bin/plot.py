@@ -94,6 +94,7 @@ class Trial(object):
         cache = os.path.join(Config.DATA, 'cache', label)
         if os.path.exists(cache):
             self.PATH = cache
+            self.LABEL = label
             return True
         else:
             print("Can't find series {}".format(label))
@@ -177,7 +178,7 @@ class Trial(object):
         # create figure, canvas
         fig = pyplot.figure(figsize=(8,5))
         ax = fig.add_axes([.1,.1,.8,.8])
-        ax.set_title('Python - {}'.format(auth))
+        ax.set_title('{} : {}'.format(self.LABEL, auth))
         ax.set_xlabel('PC1')
         ax.set_ylabel('PC2')
 

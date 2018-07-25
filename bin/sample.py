@@ -51,7 +51,7 @@ if __name__ == '__main__':
         metavar='OFFSET', type=int, default = 0,
         help='Shift samples by OFFSET lines. Default 0.')
     parser.add_argument('--step',
-        metavar='STEP', default = None,
+        metavar='STEP', type=int, default = None,
         help='Move window by STEP lines each time. Default SIZE (no overlap between samples).')
     parser.add_argument('--feature',
         metavar='FEAT', type=str, default = 'lemmata',
@@ -64,10 +64,17 @@ if __name__ == '__main__':
 
     # set the default series label
     if args.label is None:
-        args.label = '{f}-{s}-{o}'.format(
-            f = args.feature,
-            s = args.size,
-            o = args.offset)
+        if args.step is None:
+            args.label = '{f}-{s}-{o}'.format(
+                f = args.feature,
+                s = args.size,
+                o = args.offset)
+        else:
+            args.label = '{f}-{s}-{t}-{o}'.format(
+                f = args.feature,
+                s = args.size,
+                t = args.step,
+                o = args.offset)
             
     # set the default step size
     if args.step is None:
