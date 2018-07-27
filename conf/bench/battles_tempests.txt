@@ -1,0 +1,187 @@
+ovid	1.260	1.347	Tempête
+ovid	3.107	3.128	Bataille
+ovid	5.30	5.176	Bataille
+ovid	6.685	6.701	Tempête
+ovid	11.6	11.43	Bataille
+ovid	11.431	11.436	Tempête
+ovid	11.474	11.572	Tempête
+ovid	12.64	12.145	Bataille
+ovid	12.224	12.392	Bataille
+ovid	12.419	12.535	Bataille
+ovid	12.549	12.574	Bataille
+ovid	12.584	12.611	Bataille
+ovid	13.73	13.94	Bataille
+ovid	13.249	13.267	Bataille
+ovid	13.798	13.804	Bataille
+ovid	14.450	14.456	Bataille
+ovid	14.523	14.541	Bataille
+ovid	14.542	14.548	Tempête
+ovid	14.566	14.577	Bataille
+silius_italicus	1.304	1.323	Bataille
+silius_italicus	1.333	1.340	Bataille
+silius_italicus	1.365	1.557	Bataille
+silius_italicus	2.89	2.147	Bataille
+silius_italicus	2.148	2.269	Bataille
+silius_italicus	3.463	3.476	Tempête
+silius_italicus	3.523	3.527	Tempête
+silius_italicus	4.134	4.242	Bataille
+silius_italicus	4.243	4.247	Tempête 
+silius_italicus	4.248	4.396	Bataille
+silius_italicus	4.445	4.468	Bataille
+silius_italicus	4.510	4.519	Bataille
+silius_italicus	4.520	4.524	Tempête
+silius_italicus	4.529	4.572	Bataille
+silius_italicus	4.573	4.666	Bataille 
+silius_italicus	5.222	5.351	Bataille
+silius_italicus	5.390	5.474	Bataille
+silius_italicus	5.498	5.583	Bataille
+silius_italicus	5.611	5.631	Tempête
+silius_italicus	5.644	5.678	Bataille
+silius_italicus	7.40	7.61	Bataille
+silius_italicus	7.565	7.568	Bataille
+silius_italicus	7.569	7.574	Tempête
+silius_italicus	7.580	7.708	Bataille
+silius_italicus	9.304	9.339	Bataille
+silius_italicus	9.370	9.400	Bataille
+silius_italicus	9.401	9.410	Bataille
+silius_italicus	9.451	9.469	Bataille
+silius_italicus	9.491	9.524	Tempête
+silius_italicus	9.556	9.631	Bataille
+silius_italicus	10.25	10.44	Bataille
+silius_italicus	10.92	10.169	Bataille
+silius_italicus	10.170	10.201	Bataille
+silius_italicus	10.202	10.214	Tempête
+silius_italicus	10.215	10.259	Bataille
+silius_italicus	12.181	12.200	Bataille
+silius_italicus	12.212	12.280	Bataille
+silius_italicus	12.387	12.419	Bataille
+silius_italicus	12.463	12.472	Bataille
+silius_italicus	12.609	12.636	Tempête
+silius_italicus	12.651	12.663	Tempête
+silius_italicus	13.153	13.178	Bataille
+silius_italicus	13.179	13.190	Bataille
+silius_italicus	13.225	13.255	Bataille
+silius_italicus	14.125	14.147	Bataille
+silius_italicus	14.292	14.315	Bataille
+silius_italicus	14.353	14.561	Bataille
+silius_italicus	15.366	15.380	Bataille
+silius_italicus	15.435	15.470	Bataille
+silius_italicus	15.626	15.808	Bataille
+silius_italicus	16.38		16.71	Bataille
+silius_italicus	17.236	17.277	Tempête
+silius_italicus	17.406	17.508	Bataille
+vergil	1.81	1.130	Tempête
+vergil	2.383	2.385	Bataille
+vergil	2.407	2.415	Bataille
+vergil	2.416	2.419	Tempête 
+vergil	2.420	2.430	Bataille
+vergil	2.438	2.449	Bataille
+vergil	2.464	2.481	Bataille
+vergil	3.192	3.204	Tempête
+vergil	3.234	3.244	Bataille 
+vergil	5.426	5.464	Bataille
+vergil	7.511	7.539	Bataille
+vergil	8.671	8.708	Bataille
+vergil	9.47	9.57	Bataille 
+vergil	9.324	9.351	Bataille 
+vergil	9.410	9.445	Bataille 
+vergil	9.503	9.594	Bataille
+vergil	9.661	9.667	Bataille
+vergil	9.688	9.709	Bataille
+vergil	9.731	9.814	Bataille
+vergil	10.118	10.147	Bataille
+vergil	10.310	10.361	Bataille
+vergil	10.380	10.434	Bataille
+vergil	10.474	10.497	Bataille 
+vergil	10.512	10.603	Bataille
+vergil	10.689	10.832	Bataille
+vergil	10.882	10.908	Bataille
+vergil	11.597	11.724	Bataille
+vergil	11.742	11.819	Bataille
+vergil	11.858	11.866	Bataille
+vergil	11.891	11.895	Bataille
+vergil	12.266	12.310	Bataille
+vergil	12.317	12.383	Bataille
+vergil	12.451	12.455	Tempête 
+vergil	12.458	12.463	Bataille
+vergil	12.488	12.499	Bataille
+vergil	12.505	12.517	Bataille
+vergil	12.525	12.553	Bataille
+vergil	12.710	12.733	Bataille
+vergil	12.887	12.907	Bataille
+vergil	12.919	12.952	Bataille
+valerius_flaccus	1.115	1.116	Tempête?
+valerius_flaccus	1.607	1.654	Tempête
+valerius_flaccus	2.365	2.369	Tempête?
+valerius_flaccus	2.434	2.436	Tempête ?
+valerius_flaccus	2.505	2.508	Tempête?
+valerius_flaccus	2.521	2.536	Bataille?
+valerius_flaccus	3.74	3.248	Bataille
+valerius_flaccus	4.268	4.271	Tempête?
+valerius_flaccus	6.26	6.32	Bataille
+valerius_flaccus	6.182	6.426	Bataille
+valerius_flaccus	6.507	6.574	Bataille
+valerius_flaccus	6.613	6.620	Bataille
+valerius_flaccus	6.631	6.657	Bataille
+valerius_flaccus	6.683	6.724	Bataille
+valerius_flaccus	6.739	6.751	Bataille
+valerius_flaccus	7.616	7.624	Bataille
+valerius_flaccus	7.630	7.644	Bataille
+valerius_flaccus	8.328	8.334	Tempête
+valerius_flaccus	8.357	8.368	Tempête
+valerius_flaccus	8.372	8.375	Tempête
+lucan	1.236	1.243	Bataille ?
+lucan	2.98	2.130	Bataille?
+lucan	2.139	2.224	Bataille?
+lucan	2.447	2.477	Bataille? 
+lucan	2.711	2.714	Bataille navale?
+lucan	3.455	3.508	Bataille
+lucan	3.537	3.751	Bataille navale
+lucan	4.243	4.253	Bataille
+lucan	4.544	4.573	Bataille navale
+lucan	4.737	4.797	Bataille
+lucan	5.560	5.567	Tempête
+lucan	5.594	5.653	Tempête
+lucan	6.169	6.246	Bataille
+lucan	7.214	7.232	Bataille?
+lucan	7.460	7.637	Bataille
+lucan	9.319	9.347	Tempête
+lucan	9.445	9.497	Tempête ?
+lucan	9.734	9.838	Bataille ?
+lucan	10.436	10.443	Bataille
+lucan	10.478	10.546	Bataille
+statius	1.370	1.379	Tempête?
+statius	1.410	1.430	Bataille?
+statius	1.605	1.616	Bataille?
+statius	2.105	2.106	Tempête?
+statius	2.529	2.680	Bataille ?
+statius	3.22	3.30	Tempête?
+statius	5.361	5.375	Tempête
+statius	5.376	5.419	Bataille
+statius	5.704	5.709	Tempête?
+statius 7.35	7.39	Tempête?
+statius	7.86	7.89	Tempête?
+statius	7.131	7.139	Bataille
+statius	7.615	7.803	Bataille
+statius	8.342	8.366	Bataille
+statius	8.383	8.553	Bataille
+statius	8.570	8.600	Bataille
+statius	8.655	8.756	Bataille
+statius	9.103	9.141	Bataille
+statius	9.141	9.143	Tempête comparaison
+statius	9.223	9.314	Bataille dans le fleuve Ismène
+statius	9.459	9.469	Tempête dans le fleuve Ismène (overlap avec la scène de combat suivante)
+statius	9.462	9.505	Bataille entre Hippomédon et le fleuve Ismène (personnifié)
+statius	9.519	9.525	Tempête du fleuve apaisée par Jupiter
+statius	9.546	9.567	Bataille (Capanée tue Hypsée)
+statius	9.670	9.679	Bataille (Parthénopée)
+statius	9.745	9.819	Bataille (Parthénopée)
+statius	9.848	9.883	Bataille (Parthénopée)
+statius	10.271	10.323	Bataille contre les Thébains endormis ?
+statius	10.514	10.574	Bataille (siège de Thèbes)
+statius	10.537	10.541	Tempête (comparaison) ?
+statius	10.738	10.755	Bataille (Capanée)
+statius	10.853	10.882	Bataille (contre Capanée qui escalade les murs de Thèbes)
+statius	11.32		11.56		Bataille (le Thébains poursuivent les Grecs en fuite)
+statius	11.497	11.573	Bataille (Etéocle et Polynice)
+statius	12.720	12.781	Bataille (Thésée contre Thébains)
