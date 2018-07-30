@@ -172,7 +172,8 @@ class Trial(object):
             return range(i_start, i_stop+1)
 
 
-    def plotAuthor(self, auth):
+    def plotAuthor(self, auth, marker='', points=SHADOW[0],
+                   text='#000000'):
         '''plot one author'''
 
         # create figure, canvas
@@ -188,11 +189,12 @@ class Trial(object):
         tags = self.firstlines[self.authors==auth]
 
         # plot, but with no points
-        ax.plot(xs, ys, ls='', marker = '')
+        ax.plot(xs, ys, ls='', marker = marker, color=points)
 
         # add locus tags at every x,y point
-        for x, y, tag in zip(xs, ys, tags):
-            ax.text(x, y, tag, fontsize=6)
+        if text is not None:
+            for x, y, tag in zip(xs, ys, tags):
+                ax.text(x, y, tag, fontsize=6, color=text)
 
         return fig
 
@@ -238,6 +240,37 @@ class Trial(object):
 
         return fig
 
+
+    def tracePassage(self, author, loc_start, loc_stop, anim=False):
+        '''Follow relative movement of sample across a scene'''
+                
+        fig = self.plotAuthor(author, marker='o', points=SHADOW[-1], text=None)
+        ax = fig.get_axes()[0]
+        ax.set_title('{} {}-{}'.format(author, loc_start, loc_stop))
+        ids = self.findPassage(author, loc_start, loc_stop)
+        
+        if anim:
+            text_colour = "#e0e0e0"
+        else:
+            text_colour = "#000000"
+            
+        for i in ids:
+            ax.text(self.pca[i, 0], self.pca[i, 1], self.firstlines[i], fontsize=6,
+                    color=text_colour)
+        
+        lab = ax.text(self.pca[i, 0], self.pca[i, 1], self.firstlines[i], fontsize=6)
+        
+        if anim:
+            from matplotlib.animation import FuncAnimation
+
+            def update(i):
+                lab.set_x(self.pca[i, 0])
+                lab.set_y(self.pca[i, 1])
+                lab.set_text(self.firstlines[i])
+                
+            fig = FuncAnimation(fig, update, frames=ids)
+            
+        return fig
 
 #
 # main
