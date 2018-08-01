@@ -97,7 +97,7 @@ class Trial(object):
             self.LABEL = label
             return True
         else:
-            print("Can't find series {}".format(label))
+            print("Can't find trial {}".format(label))
             return False
 
 
@@ -218,7 +218,7 @@ class Trial(object):
                 tags.extend([tag] * len(s_id))
 
         # plot shadow version of larger dataset
-        mask = np.isin(labels, authors)
+        mask = np.isin(self.authors, authors)
         fig = basePlot(xs=self.pca[mask, 0], ys=self.pca[mask, 1],
                 labels=self.authors[mask], colors=SHADOW, title=title)
 
@@ -243,23 +243,23 @@ class Trial(object):
 
     def tracePassage(self, author, loc_start, loc_stop, anim=False):
         '''Follow relative movement of sample across a scene'''
-                
+
         fig = self.plotAuthor(author, marker='o', points=SHADOW[-1], text=None)
         ax = fig.get_axes()[0]
         ax.set_title('{} {}-{}'.format(author, loc_start, loc_stop))
         ids = self.findPassage(author, loc_start, loc_stop)
-        
+
         if anim:
             text_colour = "#e0e0e0"
         else:
             text_colour = "#000000"
-            
+
         for i in ids:
             ax.text(self.pca[i, 0], self.pca[i, 1], self.firstlines[i], fontsize=6,
                     color=text_colour)
-        
+
         lab = ax.text(self.pca[i, 0], self.pca[i, 1], self.firstlines[i], fontsize=6)
-        
+
         if anim:
             from matplotlib.animation import FuncAnimation
 
@@ -267,9 +267,9 @@ class Trial(object):
                 lab.set_x(self.pca[i, 0])
                 lab.set_y(self.pca[i, 1])
                 lab.set_text(self.firstlines[i])
-                
+
             fig = FuncAnimation(fig, update, frames=ids)
-            
+
         return fig
 
 #
@@ -281,14 +281,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Plot feature vectors'
     )
-    parser.add_argument('series',
-        help='Sample series to plot.')
+    parser.add_argument('trial',
+        help='Name of the sample set to plot.')
     parser.add_argument('--title',
         metavar='TITLE', type=str, default=None,
-        help='Title for graph. Defaults to "SERIES".')
+        help='Title for graph. Defaults to "TRIAL".')
     parser.add_argument('--out',
         metavar='FILE', type=str, default=None,
-        help='Output file name. Defaults to "plot_SERIES.pdf".')
+        help='Output file name. Defaults to "plot/TRIAL.pdf".')
     parser.add_argument('--format',
         metavar='FMT', type=str, default='pdf', choices=['pdf', 'png'],
         help='Output file format.')
@@ -297,13 +297,13 @@ if __name__ == '__main__':
 
     # set default title
     if args.title is None:
-        args.title = args.series
+        args.title = args.trial
 
     #
     # Load data
     #
 
-    trial = Trial(args.series)
+    trial = Trial(args.trial)
 
     #
     # Plot
@@ -317,11 +317,13 @@ if __name__ == '__main__':
 
     # write output
     if args.out is None:
-        file_out = '{}.{}'.format(args.series, args.format)
+        file_out = '{}.{}'.format(args.trial, args.format)
     else:
         file_out = args.out
         if not (file_out.endswith('.pdf') or file_out.endswith('.png')):
             file_out += '.' + args.format
+
+    file_out = os.path.join('plot', file_out)
 
     print('Saving plot to {}'.format(file_out))
     fig.savefig(file_out)
