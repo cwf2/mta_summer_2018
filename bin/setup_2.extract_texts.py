@@ -27,7 +27,15 @@ def parseXML(xmlFile):
     
     xml = etree.parse(xmlFile).getroot()
     lines = []
+    
+    # get the number of the enclosing book
+    # FIXME: make this more elegant
     book_n = 0
+    book_xpath='.//{http://www.tei-c.org/ns/1.0}div[@type="textpart" and @subtype="book"]'
+    bookFinder = etree.ETXPath(book_xpath)
+    book_list = bookFinder(xml)
+    if len(book_list) > 0:
+        book_n = book_list[0].get('n', 0)
     
     for l in xml.iter('{http://www.tei-c.org/ns/1.0}l'):
         for note in l.iter('{http://www.tei-c.org/ns/1.0}note'):
