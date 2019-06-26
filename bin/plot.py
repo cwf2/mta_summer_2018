@@ -25,11 +25,11 @@ from matplotlib import pyplot
 # try to simulate R Color Brewer's Set 1
 COLORS = [
     '#ff0000', # red
-    '#0000dd', # blue
+    '#eedd00', # yellow
     '#00dd00', # green
     '#8800aa', # purple
     '#ff8800', # orange
-    '#eeee00', # yellow
+    '#0000dd', # blue
 ]
 # background version for type scene overlay
 SHADOW = [
@@ -40,23 +40,24 @@ SHADOW = [
     '#bbbbbb', # orange
     '#eeeeee', # yellow
 ]
-
+FIG_W = 12
+FIG_H = 7
 
 #
 # functions
 #
 
-def basePlot(xs, ys, labels, colors=COLORS, title=None):
+def basePlot(xs, ys, labels, colors=COLORS, title=None, legend=False):
     '''Basic plot'''
 
     # if we're going to have a legend, adjust figure width to make room
-    if len(set(labels)) > 1:
-        w = .6
+    if legend and len(set(labels)) > 1:
+       w = .6
     else:
-        w = .8
+       w = .8
 
     # create figure, canvas
-    fig = pyplot.figure(figsize=(8,5))
+    fig = pyplot.figure(figsize=(FIG_W, FIG_H))
     ax = fig.add_axes([.1, .1, w, .8])
     if title is not None:
         ax.set_title(title)
@@ -64,7 +65,7 @@ def basePlot(xs, ys, labels, colors=COLORS, title=None):
     ax.set_ylabel('PC2')
 
     # marker set to use
-    markers = 'ovP*4D^x3p'
+    markers = 'ovP*Xd^43p'
 
     # plot each author as a separate series
     for i, l in enumerate(sorted(set(labels))):
@@ -72,11 +73,54 @@ def basePlot(xs, ys, labels, colors=COLORS, title=None):
             ls='', marker=markers[i], color=colors[i], label=l)
 
     # add legend
-    if len(set(labels)) > 1:
+    if legend and len(set(labels)) > 1:
         fig.legend()
 
     return fig
 
+def ACAbasePlot(xs, ys, labels, colors=COLORS, title=None, legend=False, hi=None):
+    '''Basic plot w/ single author highlighted'''
+
+    # if we're going to have a legend, adjust figure width to make room
+    if legend and len(set(labels)) > 1:
+       w = .6
+    else:
+       w = .8
+
+    # create figure, canvas
+    fig = pyplot.figure(figsize=(FIG_W, FIG_H))
+    ax = fig.add_axes([.1, .1, w, .8])
+    if title is not None:
+        ax.set_title(title)
+    ax.set_xlabel('PC1')
+    ax.set_ylabel('PC2')
+
+    # marker set to use
+    markers = 'ovP*Xd^43p'
+    
+    i_hi = None
+    l_hi = None
+
+    # plot each author as a separate series
+    for i, l in enumerate(sorted(set(labels))):
+        if l == hi:
+            color = colors[i]
+            i_hi = i
+            l_hi = l
+        else:
+            color = '#aaaaaa'
+        ax.plot(xs[labels==l], ys[labels==l],
+            ls='', marker=markers[i], color=color, label=l)
+
+    if i_hi is not None:
+        ax.plot(xs[labels==l_hi], ys[labels==l_hi],
+            ls='', marker=markers[i_hi], color=colors[i_hi])
+
+    # add legend
+    if legend and len(set(labels)) > 1:
+        fig.legend()
+
+    return fig
 
 class Trial(object):
     '''Represents one sample set'''
@@ -172,16 +216,27 @@ class Trial(object):
             return range(i_start, i_stop+1)
 
 
-    def plotAuthor(self, auth, marker='', points=SHADOW[0],
+    def plotAuthor(self, auth, marker='', points=SHADOW[0], corpus=False,
                    text='#000000'):
         '''plot one author'''
+        
+        # generate title
+        title = '{} : {}'.format(self.LABEL, auth)
 
-        # create figure, canvas
-        fig = pyplot.figure(figsize=(8,5))
-        ax = fig.add_axes([.1,.1,.8,.8])
-        ax.set_title('{} : {}'.format(self.LABEL, auth))
-        ax.set_xlabel('PC1')
-        ax.set_ylabel('PC2')
+        # background image
+        if corpus:
+            # plot shadow version of larger dataset
+            mask = self.authors != auth
+            fig = basePlot(xs=self.pca[mask, 0], ys=self.pca[mask, 1],
+                    labels=self.authors[mask], colors=SHADOW, title=title)
+            ax = fig.get_axes()[0]
+        else:
+            # create figure, canvas
+            fig = pyplot.figure(figsize=(FIG_W, FIG_H))
+            ax = fig.add_axes([.1,.1,.8,.8])
+            ax.set_title(title)
+            ax.set_xlabel('PC1')
+            ax.set_ylabel('PC2')
 
         # select data by author name
         xs = self.pca[self.authors==auth, 0]

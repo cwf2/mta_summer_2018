@@ -65,12 +65,12 @@ if __name__ == '__main__':
     # set the default series label
     if args.label is None:
         if args.step is None:
-            args.label = '{f}-{s}-{o}'.format(
+            args.label = '{f}-{s}-{o:02d}'.format(
                 f = args.feature,
                 s = args.size,
                 o = args.offset)
         else:
-            args.label = '{f}-{s}-{t}-{o}'.format(
+            args.label = '{f}-{s}-{t}-{o:02d}'.format(
                 f = args.feature,
                 s = args.size,
                 t = args.step,
